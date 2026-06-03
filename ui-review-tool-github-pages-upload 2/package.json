@@ -1,0 +1,12 @@
+{
+  "name": "ui-review-tool",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Static UI review website for design-vs-dev screenshot comparison.",
+  "scripts": {
+    "dev": "python3 -m http.server 8125 --bind 127.0.0.1",
+    "serve": "npx serve . -l 8125",
+    "deploy:vercel": "vercel --prod",
+    "deploy:netlify": "netlify deploy --prod --dir ."
+  }
+}

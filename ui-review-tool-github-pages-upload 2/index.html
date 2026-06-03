@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>UI验收工具</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="shell-header panel">
+        <div class="hero-main">
+          <p class="eyebrow">VISUAL QA WORKBENCH</p>
+          <h1>UI验收工具</h1>
+          <p class="hero-copy">
+            先上传设计稿和开发截图，再开始检测并查看明显的视觉差异列表。
+          </p>
+        </div>
+
+        <div class="toolbar-grid">
+          <section class="toolbar-group">
+            <p class="toolbar-label">上传素材</p>
+            <div class="toolbar-actions">
+              <label class="tool-button file-button" for="design-input">
+                <span>上传设计稿</span>
+                <input id="design-input" type="file" accept="image/*" />
+              </label>
+              <label class="tool-button file-button" for="dev-input">
+                <span>上传开发截图</span>
+                <input id="dev-input" type="file" accept="image/*" />
+              </label>
+            </div>
+          </section>
+
+          <section class="toolbar-group">
+            <p class="toolbar-label">显示设置</p>
+            <div class="toolbar-actions">
+              <label class="tool-chip toggle-chip">
+                <input id="overlay-toggle" type="checkbox" checked />
+                <span>设计稿叠层</span>
+              </label>
+              <label class="tool-chip toggle-chip">
+                <input id="all-boxes-toggle" type="checkbox" />
+                <span>全部问题框</span>
+              </label>
+            </div>
+          </section>
+
+          <section class="toolbar-group toolbar-group-end">
+            <p class="toolbar-label">执行操作</p>
+            <div class="toolbar-actions">
+              <button id="compare-button" class="tool-button primary-button" disabled>开始检测</button>
+              <button id="reset-button" class="tool-button secondary-button">重置</button>
+            </div>
+          </section>
+        </div>
+      </header>
+
+      <section class="status-board panel">
+        <div class="status-header">
+          <div>
+            <p class="eyebrow">当前状态</p>
+            <h2>上传两张截图后，点击“开始检测”生成候选问题列表。</h2>
+          </div>
+          <div id="status-banner" class="status-banner neutral">
+            上传两张同尺寸截图后开始检测。
+          </div>
+        </div>
+
+        <div class="status-grid">
+          <article class="status-card">
+            <span class="status-card-label">问题数</span>
+            <strong id="issue-total">0</strong>
+            <div class="status-card-meta">按当前规则输出的候选问题</div>
+          </article>
+
+          <article class="status-card">
+            <span class="status-card-label">显示方式</span>
+            <strong id="mode-state">设计稿叠层</strong>
+            <div class="status-card-meta">支持叠层参考与全部问题框切换</div>
+          </article>
+
+          <article id="design-panel" class="status-card upload-card">
+            <span class="status-card-label">设计稿状态</span>
+            <strong id="design-state">未上传</strong>
+            <div id="design-meta" class="status-card-meta">等待上传</div>
+          </article>
+
+          <article id="dev-panel" class="status-card upload-card">
+            <span class="status-card-label">开发稿状态</span>
+            <strong id="dev-state">未上传</strong>
+            <div id="dev-meta" class="status-card-meta">等待上传</div>
+          </article>
+        </div>
+
+      </section>
+
+      <main class="workspace">
+        <section class="assets-panel panel">
+          <article class="asset-card">
+            <div class="asset-card-header">
+              <div>
+                <p class="eyebrow">Design</p>
+                <h2>设计稿</h2>
+              </div>
+              <span id="design-tag" class="asset-tag">等待上传</span>
+            </div>
+            <p class="asset-copy">作为视觉基准，用于比对颜色、字号、圆角、间距和对齐偏差。</p>
+            <div id="design-preview" class="asset-preview empty">等待上传截图</div>
+          </article>
+
+          <article class="asset-card asset-card-divider">
+            <div class="asset-card-header">
+              <div>
+                <p class="eyebrow">Develop</p>
+                <h2>开发稿</h2>
+              </div>
+              <span id="dev-tag" class="asset-tag">等待上传</span>
+            </div>
+            <p class="asset-copy">建议使用与设计稿同尺寸、同视口位置的页面截图，结果更稳定。</p>
+            <div id="dev-preview" class="asset-preview empty">等待上传截图</div>
+          </article>
+        </section>
+
+        <section class="canvas-panel panel">
+          <div class="canvas-toolbar">
+            <div class="canvas-title-group">
+              <p class="eyebrow">Review Canvas</p>
+              <h2>验收画布</h2>
+              <span id="canvas-size">等待上传</span>
+            </div>
+            <div class="canvas-actions">
+              <div class="canvas-zoom">
+                <button id="zoom-out-button" class="zoom-button" type="button">-</button>
+                <button id="zoom-reset-button" class="zoom-button zoom-label" type="button">100%</button>
+                <button id="zoom-in-button" class="zoom-button" type="button">+</button>
+              </div>
+              <div id="focus-hint" class="focus-hint">选择右侧问题后会在画布中高亮对应区域</div>
+            </div>
+          </div>
+          <div id="canvas-scroll" class="canvas-scroll">
+            <canvas id="review-canvas" width="960" height="640"></canvas>
+          </div>
+        </section>
+
+        <aside class="issues-panel panel">
+          <div class="issues-header">
+            <div>
+              <p class="eyebrow">Issues</p>
+              <h2>问题列表</h2>
+            </div>
+            <div id="issue-summary" class="issue-summary">0 个候选问题</div>
+          </div>
+
+          <div class="issues-helper">
+            <p id="issue-filter-meta" class="issues-helper-meta">当前显示 0 / 0</p>
+            <p class="issues-helper-copy">确认问题才计入最终问题，忽略问题不计入。</p>
+          </div>
+
+          <div class="issue-filter-bar">
+            <button class="issue-filter-button active" type="button" data-issue-filter="all">全部</button>
+            <button class="issue-filter-button" type="button" data-issue-filter="pending">待确认</button>
+            <button class="issue-filter-button" type="button" data-issue-filter="confirmed">已确认</button>
+            <button class="issue-filter-button" type="button" data-issue-filter="ignored">已忽略</button>
+          </div>
+
+          <div id="selected-issue-card" class="selected-issue-card empty">
+            选中问题后，这里会显示更详细的说明与定位信息。
+          </div>
+
+          <div id="issues-list" class="issues-list empty">
+            检测完成后，这里会列出可高亮查看的问题卡片。
+          </div>
+        </aside>
+      </main>
+    </div>
+
+    <template id="issue-item-template">
+      <article class="issue-item">
+        <div class="issue-item-head">
+          <div class="issue-pill-group">
+            <span class="issue-severity-pill"></span>
+            <span class="issue-type-pill"></span>
+            <span class="issue-source-pill">规则</span>
+          </div>
+          <div class="issue-item-actions">
+            <span class="issue-status-button"></span>
+            <button class="issue-expand-button" type="button" aria-label="展开问题详情"></button>
+          </div>
+        </div>
+
+        <div class="issue-card-main" role="button" tabindex="0">
+          <strong class="issue-title"></strong>
+          <p class="issue-description"></p>
+          <div class="issue-item-meta">
+            <span class="issue-confidence"></span>
+            <span class="issue-index"></span>
+            <span class="issue-region"></span>
+          </div>
+        </div>
+
+        <div class="issue-item-detail" hidden></div>
+      </article>
+    </template>
+
+    <script defer src="./src/detection.js"></script>
+    <script defer src="./src/app.js"></script>
+  </body>
+</html>
